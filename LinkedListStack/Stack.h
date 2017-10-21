@@ -46,6 +46,11 @@ public:
 	}
 
 	Stack& operator=( const Stack& src ) {
+
+		if ( !Empty ( ) ) {  //need this if we try to copy assign on top of existing value
+			delete pTop;
+			pTop = nullptr;
+		}
 		if ( !src.Empty ( ) ) {
 			pTop = new Element ( *src.pTop );
 		}
