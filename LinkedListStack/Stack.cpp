@@ -13,65 +13,61 @@
 //	}
 //}
 
+
 void Stack::Push ( int val )
 {
-	Element *temp = new Element ( val );
+	pTop = new Element ( val, pTop );
 
-	if ( head == nullptr ) {
-		head = temp;
-		tail = temp;
-	}
-	else {
-		tail->next = temp;
-		tail = temp;
-	}
 }
 
 int Stack::Pop ( )
 {
-	int val = -1;
-	if ( head == nullptr ) {
-		std::cout << "Nothing in the stack." << std::endl;
+	if ( Empty ( ) ) {
+		return -1;
 	}
-	else if ( tail == head && head != nullptr ) {
-		val = head->val;
-		delete head;
-		tail = nullptr;
-		head = nullptr;
+	else {
+		const int tempVal = pTop->GetValue ( );
+		const auto pTemp = pTop;
+		pTop = pTop->Detach ( );
+		delete pTemp;
+		return tempVal;
 	}
-	else
-	{
-		Element *temp = head;
-		Element *tempPrev = head;
-		while ( temp != tail ) {
-			tempPrev = temp;
-			temp = temp->next;
-		}
-		val = temp->val;
-		delete temp;
-		tail = tempPrev;
-		tempPrev->next = nullptr;
-	}
-	return val;
 }
 
 int Stack::Size ( ) const
 {
-	if ( head == nullptr ) {
+	if ( Empty ( ) ) {
 		return 0;
 	}
 	else {
-		int count = 1;
-		Element *temp = head;
-		while ( temp->next != nullptr ) {
-			temp = temp->next;
-			count++;
-		}
-		return count;
+		return ( pTop->CountElements ( ) );
 	}
 }
 
 bool Stack::Empty ( ) const
 {
-	return ( head == nullptr && tail == nullptr );
+	return ( pTop == nullptr );
+}
+
+
+int Stack::Element::GetValue ( ) const
+{
+	return val;
+}
+
+Stack::Element* Stack::Element::Detach ( )
+{
+	auto pTemp = pNext;
+	pNext = nullptr;
+	return pTemp;
+}
+
+int Stack::Element::CountElements ( ) const
+{
+	if ( pNext != nullptr ) {
+		return pNext->CountElements ( ) + 1;
+	}
+	else {
+		return 1;
+	}
 }

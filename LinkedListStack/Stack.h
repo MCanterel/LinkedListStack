@@ -5,41 +5,47 @@ class Stack {
 private:
 	class Element {
 	public:
+
+		Element ( int val, Element* pNext ) 
+			:val ( val ), pNext ( pNext ) {};
+
+		Element ( const Element& src )
+			:val ( src.val )
+		{
+			if ( src.pNext != nullptr ) {
+				pNext = new Element ( *src.pNext );  //whoah
+			}
+		}
+
+		int GetValue ( ) const;
+		Element* Detach ( );
+		int CountElements ( ) const;
+	private:
 		int val;
-		Element *next;
-		Element ( ) : next ( nullptr ) {};
-		Element ( int val ) :val ( val ), next ( nullptr ) {};
-		/*~Element ( ) {
-			delete next;
-			next = nullptr;
-		}*/
+		Element *pNext = nullptr;
 	};
+
 private:
-	Element *head;
-	Element *tail;
+	Element *pTop = nullptr;
+
 public:
-	Stack ( ) {
-		head = nullptr;
-		tail = nullptr;
-	}
-	Stack ( const Stack& source ) {
-		head = source.head;
-		tail = source.tail;
-	}
-	/*Stack& operator=( const Stack& source ) {
+	Stack ( ) = default;
 
-	}*/
-
-	~Stack ( ) {
-		//delete head;
-		//delete tail;
-		//head = nullptr;
-		//tail = nullptr;
+	Stack ( const Stack& src ) {
+		*this = src;
 	}
-	//void Print ( );
+
+	Stack& operator=( const Stack& src ) {
+		if ( !src.Empty ( ) ) {
+			pTop = new Element ( *src.pTop );
+		}
+		return *this;
+	}
 
 	void Push ( int val );
-	int Pop ( );  //not done...
+	int Pop ( );
 	int Size ( ) const;
 	bool Empty ( ) const;
+	//void Print ( );
+
 };
