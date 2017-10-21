@@ -17,6 +17,11 @@ private:
 			}
 		}
 
+		~Element ( ) {
+			delete pNext;  //this is recursive
+			pNext = nullptr;
+		}
+
 		int GetValue ( ) const;
 		Element* Detach ( );
 		int CountElements ( ) const;
@@ -33,6 +38,11 @@ public:
 
 	Stack ( const Stack& src ) {
 		*this = src;
+	}
+
+	~Stack ( ) {
+		delete pTop;
+		pTop = nullptr;
 	}
 
 	Stack& operator=( const Stack& src ) {
